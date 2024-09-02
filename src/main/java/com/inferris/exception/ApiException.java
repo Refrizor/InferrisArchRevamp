@@ -1,4 +1,4 @@
-package com.inferris;
+package com.inferris.exception;
 
 public class ApiException extends Exception {
     public ApiException(String message) {

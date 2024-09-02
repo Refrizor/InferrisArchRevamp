@@ -1,4 +1,4 @@
-package com.inferris;
+package com.inferris.utils;
 
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;

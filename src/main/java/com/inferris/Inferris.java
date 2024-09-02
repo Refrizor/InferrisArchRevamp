@@ -3,6 +3,7 @@ package com.inferris;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.inferris.api.PlayerDataApiClient;
+import com.inferris.commands.CommandAPI;
 import com.inferris.config.ConfigType;
 import com.inferris.config.ConfigurationHandler;
 import com.inferris.events.EventJoin;

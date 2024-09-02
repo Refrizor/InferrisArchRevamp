@@ -1,6 +1,7 @@
-package com.inferris;
+package com.inferris.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.inferris.utils.SerializationUtils;
 import com.inferris.api.PlayerDataApiClient;
 import com.inferris.model.PlayerData;
 import com.inferris.cache.PlayerDataCache;

@@ -1,0 +1,15 @@
+name: Inferris
+main: com.inferris.Inferris
+version: 1.0.0-alpha
+author: Refrizor
+description: Inferris proxy
+website: https://inferris.com
+database: true
+
+commands:
+  post:
+    description: Post
+  get:
+    description: Get
+  api:
+    description: API

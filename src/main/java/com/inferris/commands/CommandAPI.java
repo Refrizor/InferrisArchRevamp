@@ -62,7 +62,7 @@ public class CommandAPI extends Command {
                     try {
                         int staffValue = Integer.parseInt(args[1]);
                         PlayerData playerData = playerDataService.getPlayerData(uuid);
-                        client.updatePlayerData(uuid, playerData);
+                        client.updatePlayerDataAsync(uuid, playerData);
                         sender.sendMessage(new TextComponent("Updated staff to: " + staffValue));
                     } catch (NumberFormatException e) {
                         sender.sendMessage(new TextComponent("Invalid staff value: " + args[1]));

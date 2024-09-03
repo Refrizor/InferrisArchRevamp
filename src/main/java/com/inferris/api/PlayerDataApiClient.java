@@ -6,12 +6,15 @@ import com.inferris.model.PlayerData;
 import com.inferris.model.Profile;
 import com.inferris.model.Rank;
 import com.inferris.model.Server;
+import org.jetbrains.annotations.NotNull;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class PlayerDataApiClient {
     private final PlayerDataApi playerDataApi;
@@ -21,61 +24,83 @@ public class PlayerDataApiClient {
         this.playerDataApi = playerDataApi;
     }
 
-    public Optional<PlayerData> fetchPlayerData(UUID uuid) {
-        try {
-            // Perform the GET request to fetch player data from the API
-            Response<ApiResponse<PlayerData>> response = playerDataApi.getPlayerData(uuid).execute();
+    public CompletableFuture<Optional<PlayerData>> fetchPlayerDataAsync(UUID uuid) {
+        CompletableFuture<Optional<PlayerData>> future = new CompletableFuture<>();
 
-            if (response.isSuccessful()) {
-                ApiResponse<PlayerData> apiResponse = response.body();
-                if (apiResponse != null && apiResponse.isSuccess()) {
-                    // Return the fetched player data wrapped in an Optional
-                    return Optional.ofNullable(apiResponse.getPlayer());
+        playerDataApi.getPlayerData(uuid).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NotNull Call<ApiResponse<PlayerData>> call, @NotNull Response<ApiResponse<PlayerData>> response) {
+                if (response.isSuccessful()) {
+                    ApiResponse<PlayerData> apiResponse = response.body();
+                    if (apiResponse != null && apiResponse.success()) {
+                        future.complete(Optional.ofNullable(apiResponse.player()));
+                    } else {
+                        future.complete(Optional.empty());
+                    }
+                } else if (response.code() == 404) {
+                    future.complete(Optional.empty());
                 } else {
-                    // Return an empty Optional if the response indicates failure or is null
-                    return Optional.empty();
+                    future.completeExceptionally(new RuntimeException("Failed to fetch player data: " + response.code()));
                 }
-            } else if (response.code() == 404) {
-                // If the player data is not found, return an empty Optional
-                return Optional.empty();
-            } else {
-                throw new RuntimeException("Failed to fetch player data: " + response.code());
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to fetch player data", e);
-        }
+
+            @Override
+            public void onFailure(@NotNull Call<ApiResponse<PlayerData>> call, @NotNull Throwable t) {
+                future.completeExceptionally(new RuntimeException("Failed to fetch player data", t));
+            }
+        });
+
+        return future;
     }
 
 
-    public PlayerData createPlayerData(UUID uuid, String username) {
+    public CompletableFuture<PlayerData> createPlayerDataAsync(UUID uuid, String username) {
         long joinDate = Instant.now().getEpochSecond();
 
         PlayerData newPlayerData = new PlayerData(uuid, username, new Rank(0, 0, 0, 0),
                 new Profile(joinDate, null, null, 0, false, false), 0, Channel.NONE, false, Server.LOBBY);
 
-        try {
-            //Response<Void> response = playerDataApi.createPlayerData(newPlayerData).execute();
-            Response<Void> response = playerDataApi.createPlayerData(newPlayerData).execute();
+        CompletableFuture<PlayerData> future = new CompletableFuture<>();
 
-            if (!response.isSuccessful()) {
-                throw new RuntimeException("Failed to create player data: " + response.code());
+        playerDataApi.createPlayerData(newPlayerData).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    future.complete(newPlayerData);
+                } else {
+                    future.completeExceptionally(new RuntimeException("Failed to create player data: " + response.code()));
+                }
             }
-            return newPlayerData;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to create player data", e);
-        }
+
+            @Override
+            public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
+                future.completeExceptionally(new RuntimeException("Failed to create player data", t));
+            }
+        });
+
+        return future;
     }
 
-    public void updatePlayerData(UUID uuid, PlayerData playerData) {
-        try {
-            // Perform the PUT request to update existing player data in the API
-            Response<Void> response = playerDataApi.updatePlayerData(uuid, playerData).execute();
-            if (!response.isSuccessful()) {
-                throw new RuntimeException("Failed to update player data: " + response.code());
+    public CompletableFuture<Void> updatePlayerDataAsync(UUID uuid, PlayerData playerData) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        playerDataApi.updatePlayerData(uuid, playerData).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    future.complete(null);  // Complete with null as there's no meaningful result to return
+                } else {
+                    future.completeExceptionally(new RuntimeException("Failed to update player data: " + response.code()));
+                }
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to update player data", e);
-        }
+
+            @Override
+            public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
+                future.completeExceptionally(new RuntimeException("Failed to update player data", t));
+            }
+        });
+
+        return future;
     }
 
     // Other methods for specific API interactions could be added here, e.g., /branch/1/ranks/1

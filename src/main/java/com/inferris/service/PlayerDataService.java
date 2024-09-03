@@ -5,7 +5,6 @@ import com.inferris.api.PlayerDataApiClient;
 import com.inferris.cache.PlayerDataCache;
 import com.inferris.model.PlayerData;
 
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -22,52 +21,63 @@ public class PlayerDataService {
     }
 
     public CompletableFuture<PlayerData> getPlayerDataAsync(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> {
-            // Try to get the player data from the cache
-            PlayerData playerData = playerDataCache.get(uuid).orElse(null);
-
-            if (playerData == null) {
-                // If not found in the cache, fetch from the API (synchronously within the async context)
-                Optional<PlayerData> fetchedData = apiClient.fetchPlayerData(uuid);
-
-                if (fetchedData.isPresent()) {
-                    playerData = fetchedData.get();
-                    // Cache the fetched player data for future requests
-                    playerDataCache.put(playerData);
-                } else {
-                    // Handle the case where the player data is not found in the API
-                    throw new RuntimeException("Player data not found for UUID: " + uuid);
-                }
-            }
-            return playerData;
-        });
+        // Try to get the player data from the cache
+        return CompletableFuture.supplyAsync(() -> playerDataCache.get(uuid))
+                .thenCompose(optionalPlayerData -> {
+                    if (optionalPlayerData.isPresent()) {
+                        return CompletableFuture.completedFuture(optionalPlayerData.get());
+                    } else {
+                        // If not found in the cache, fetch from the API asynchronously
+                        return apiClient.fetchPlayerDataAsync(uuid)
+                                .thenApply(fetchedData -> {
+                                    if (fetchedData.isPresent()) {
+                                        playerDataCache.put(fetchedData.get());
+                                        return fetchedData.get();
+                                    } else {
+                                        throw new RuntimeException("Player data not found for UUID: " + uuid);
+                                    }
+                                });
+                    }
+                });
     }
 
     public CompletableFuture<PlayerData> fetchOrCreatePlayerDataAsync(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> playerDataCache.get(uuid)
-                .orElseGet(() -> {
-                    // todo: Replace "Test" with actual data
-                    return apiClient.fetchPlayerData(uuid).orElseGet(() -> {
-                        PlayerData newPlayerData = apiClient.createPlayerData(uuid, "RobbityBob"); // todo: Replace "Test" with actual data
-                        playerDataCache.put(newPlayerData);
-                        return newPlayerData;
-                    });
-                }));
+        return CompletableFuture.supplyAsync(() -> playerDataCache.get(uuid))
+                .thenCompose(optionalPlayerData -> {
+                    if (optionalPlayerData.isPresent()) {
+                        return CompletableFuture.completedFuture(optionalPlayerData.get());
+                    } else {
+                        // Try to fetch from API, and if not found, create new data
+                        return apiClient.fetchPlayerDataAsync(uuid)
+                                .thenCompose(fetchedData -> {
+                                    if (fetchedData.isPresent()) {
+                                        playerDataCache.put(fetchedData.get());
+                                        return CompletableFuture.completedFuture(fetchedData.get());
+                                    } else {
+                                        // Create new player data if it doesn't exist
+                                        return apiClient.createPlayerDataAsync(uuid, "RobbityBob") // todo: Replace "RobbityBob" with actual data
+                                                .thenApply(newPlayerData -> {
+                                                    playerDataCache.put(newPlayerData);
+                                                    return newPlayerData;
+                                                });
+                                    }
+                                });
+                    }
+                });
     }
 
-
-    public void updatePlayerData(UUID uuid, Consumer<PlayerData> updater) {
-        CompletableFuture.runAsync(() -> {
-            PlayerData playerData = playerDataCache.get(uuid).orElse(getPlayerData(uuid));
-
-            // Apply the lambda function to update the PlayerData object
-            updater.accept(playerData);
-            playerDataCache.put(playerData);
-            apiClient.updatePlayerData(uuid, playerData);
-        }).exceptionally(ex -> {
-            throw new RuntimeException("Failed to update player data", ex);
-        });
+    public CompletableFuture<Void> updatePlayerDataAsync(UUID uuid, Consumer<PlayerData> updater) {
+        return getPlayerDataAsync(uuid)
+                .thenCompose(playerData -> {
+                    // Apply the lambda function to update the PlayerData object
+                    updater.accept(playerData);
+                    playerDataCache.put(playerData);
+                    return apiClient.updatePlayerDataAsync(uuid, playerData);
+                }).exceptionally(ex -> {
+                    throw new RuntimeException("Failed to update player data", ex);
+                });
     }
+
 
     // Synchronous wrapper method
     public PlayerData getPlayerData(UUID uuid) {
@@ -85,6 +95,15 @@ public class PlayerDataService {
             return fetchOrCreatePlayerDataAsync(uuid).get();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Failed to fetch player data", e);
+        }
+    }
+
+    public void updatePlayerData(UUID uuid, Consumer<PlayerData> updater) {
+        try {
+            // Block and wait for the asynchronous operation to complete
+            updatePlayerDataAsync(uuid, updater).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Failed to update player data", e);
         }
     }
 }

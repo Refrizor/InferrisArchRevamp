@@ -24,11 +24,17 @@ public class PlayerDataApiClient {
     public Optional<PlayerData> fetchPlayerData(UUID uuid) {
         try {
             // Perform the GET request to fetch player data from the API
-            Response<PlayerData> response = playerDataApi.getPlayerData(uuid).execute();
+            Response<ApiResponse<PlayerData>> response = playerDataApi.getPlayerData(uuid).execute();
 
             if (response.isSuccessful()) {
-                // Return the fetched player data wrapped in an Optional
-                return Optional.ofNullable(response.body());
+                ApiResponse<PlayerData> apiResponse = response.body();
+                if (apiResponse != null && apiResponse.isSuccess()) {
+                    // Return the fetched player data wrapped in an Optional
+                    return Optional.ofNullable(apiResponse.getPlayer());
+                } else {
+                    // Return an empty Optional if the response indicates failure or is null
+                    return Optional.empty();
+                }
             } else if (response.code() == 404) {
                 // If the player data is not found, return an empty Optional
                 return Optional.empty();
@@ -40,6 +46,7 @@ public class PlayerDataApiClient {
         }
     }
 
+
     public PlayerData createPlayerData(UUID uuid, String username) {
         long joinDate = Instant.now().getEpochSecond();
 
@@ -47,7 +54,9 @@ public class PlayerDataApiClient {
                 new Profile(joinDate, null, null, 0, false, false), 0, Channel.NONE, false, Server.LOBBY);
 
         try {
+            //Response<Void> response = playerDataApi.createPlayerData(newPlayerData).execute();
             Response<Void> response = playerDataApi.createPlayerData(newPlayerData).execute();
+
             if (!response.isSuccessful()) {
                 throw new RuntimeException("Failed to create player data: " + response.code());
             }

@@ -44,7 +44,7 @@ public class CommandAPI extends Command {
                     }
                 }
                 case "post" -> {
-                    playerDataService.getPlayerData(UUID.fromString("7d16b15d-bb22-4a6d-80db-6213b3d75007"));
+                    playerDataService.fetchOrCreatePlayerDataAsync(UUID.fromString("7d16b15d-bb22-4a6d-80db-6213b3d75007"));
                 }
                 case "update" -> {
                     playerDataService.updatePlayerData(uuid, playerData -> {
@@ -57,6 +57,7 @@ public class CommandAPI extends Command {
 
         if(length > 1){
             switch (args[0].toLowerCase()){
+
                 case "updateclient" -> {
                     try {
                         int staffValue = Integer.parseInt(args[1]);

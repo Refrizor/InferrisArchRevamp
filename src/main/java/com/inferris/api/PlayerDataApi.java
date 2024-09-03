@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface PlayerDataApi {
     @GET("/api/players/{uuid}")
-    Call<PlayerData> getPlayerData(@Path("uuid") UUID uuid);
+    Call<ApiResponse<PlayerData>> getPlayerData(@Path("uuid") UUID uuid);
 
     @POST("/api/players")
     Call<Void> createPlayerData(@Body PlayerData playerData);

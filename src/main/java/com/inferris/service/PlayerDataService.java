@@ -5,6 +5,7 @@ import com.inferris.api.PlayerDataApiClient;
 import com.inferris.cache.PlayerDataCache;
 import com.inferris.model.PlayerData;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -22,18 +23,38 @@ public class PlayerDataService {
 
     public CompletableFuture<PlayerData> getPlayerDataAsync(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
+            // Try to get the player data from the cache
             PlayerData playerData = playerDataCache.get(uuid).orElse(null);
 
             if (playerData == null) {
-                playerData = apiClient.fetchPlayerData(uuid).orElseGet(() -> {
-                    PlayerData newPlayerData = apiClient.createPlayerData(uuid, "Test");
-                    playerDataCache.put(newPlayerData);
-                    return newPlayerData;
-                });
+                // If not found in the cache, fetch from the API (synchronously within the async context)
+                Optional<PlayerData> fetchedData = apiClient.fetchPlayerData(uuid);
+
+                if (fetchedData.isPresent()) {
+                    playerData = fetchedData.get();
+                    // Cache the fetched player data for future requests
+                    playerDataCache.put(playerData);
+                } else {
+                    // Handle the case where the player data is not found in the API
+                    throw new RuntimeException("Player data not found for UUID: " + uuid);
+                }
             }
             return playerData;
         });
     }
+
+    public CompletableFuture<PlayerData> fetchOrCreatePlayerDataAsync(UUID uuid) {
+        return CompletableFuture.supplyAsync(() -> playerDataCache.get(uuid)
+                .orElseGet(() -> {
+                    // todo: Replace "Test" with actual data
+                    return apiClient.fetchPlayerData(uuid).orElseGet(() -> {
+                        PlayerData newPlayerData = apiClient.createPlayerData(uuid, "RobbityBob"); // todo: Replace "Test" with actual data
+                        playerDataCache.put(newPlayerData);
+                        return newPlayerData;
+                    });
+                }));
+    }
+
 
     public void updatePlayerData(UUID uuid, Consumer<PlayerData> updater) {
         CompletableFuture.runAsync(() -> {
@@ -53,6 +74,15 @@ public class PlayerDataService {
         try {
             // Block and wait for the asynchronous operation to complete
             return getPlayerDataAsync(uuid).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Failed to fetch player data", e);
+        }
+    }
+
+    public PlayerData fetchOrCreatePlayerData(UUID uuid) {
+        try {
+            // Block and wait for the asynchronous operation to complete
+            return fetchOrCreatePlayerDataAsync(uuid).get();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Failed to fetch player data", e);
         }

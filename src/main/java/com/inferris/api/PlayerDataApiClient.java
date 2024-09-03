@@ -2,6 +2,7 @@ package com.inferris.api;
 
 import com.google.inject.Inject;
 import com.inferris.exception.ApiClientException;
+import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataUpdateException;
 import com.inferris.model.Channel;
 import com.inferris.model.PlayerData;
@@ -60,7 +61,7 @@ public class PlayerDataApiClient {
         long joinDate = Instant.now().getEpochSecond();
 
         PlayerData newPlayerData = new PlayerData(uuid, username, new Rank(0, 0, 0, 0),
-                new Profile(joinDate, null, null, 0, false, false), 0, Channel.NONE, false, Server.LOBBY);
+                new Profile(joinDate, joinDate, null, null, 0, false, false), 0, Channel.NONE, false, Server.LOBBY);
 
         CompletableFuture<PlayerData> future = new CompletableFuture<>();
 
@@ -99,6 +100,28 @@ public class PlayerDataApiClient {
             @Override
             public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
                 future.completeExceptionally(new PlayerDataUpdateException(uuid, t));
+            }
+        });
+
+        return future;
+    }
+
+    public CompletableFuture<Void> deletePlayerDataAsync(UUID uuid) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        playerDataApi.deletePlayerData(uuid).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    future.complete(null);  // Complete with null as there's no meaningful result to return
+                } else {
+                    future.completeExceptionally(new PlayerDataDeleteException(uuid, null));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
+                future.completeExceptionally(new PlayerDataDeleteException(uuid, t));
             }
         });
 

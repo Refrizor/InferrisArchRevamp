@@ -3,10 +3,12 @@ package com.inferris.service;
 import com.google.inject.Inject;
 import com.inferris.api.PlayerDataApiClient;
 import com.inferris.cache.PlayerDataCache;
+import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataNotFoundException;
 import com.inferris.exception.PlayerDataUpdateException;
 import com.inferris.model.PlayerData;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -37,15 +39,28 @@ public class PlayerDataService {
     public CompletableFuture<PlayerData> fetchOrCreatePlayerDataAsync(UUID uuid) {
         return playerDataCache.get(uuid)
                 .map(CompletableFuture::completedFuture)
-                .orElseGet(() -> apiClient.fetchPlayerDataAsync(uuid)
-                        .thenCompose(optionalPlayerData -> optionalPlayerData
-                                .map(CompletableFuture::completedFuture)
-                                .orElseGet(() -> apiClient.createPlayerDataAsync(uuid, "RobbityBob") // todo: Replace "RobbityBob" with actual data
-                                        .thenApply(newPlayerData -> {
-                                            playerDataCache.put(newPlayerData);
-                                            return newPlayerData;
-                                        }))));
+                .orElseGet(() -> {
+                    CompletableFuture<Optional<PlayerData>> fetchFuture = apiClient.fetchPlayerDataAsync(uuid);
+
+                    if (fetchFuture == null) {
+                        // If fetchPlayerDataAsync returns null, proceed to create new player data
+                        return apiClient.createPlayerDataAsync(uuid, "RobbityBob")
+                                .thenApply(newPlayerData -> {
+                                    playerDataCache.put(newPlayerData);
+                                    return newPlayerData;
+                                });
+                    }
+
+                    return fetchFuture.thenCompose(optionalPlayerData -> optionalPlayerData
+                            .map(CompletableFuture::completedFuture)
+                            .orElseGet(() -> apiClient.createPlayerDataAsync(uuid, "RobbityBob")
+                                    .thenApply(newPlayerData -> {
+                                        playerDataCache.put(newPlayerData);
+                                        return newPlayerData;
+                                    })));
+                });
     }
+
 
     public CompletableFuture<Void> updatePlayerDataAsync(UUID uuid, Consumer<PlayerData> updater) {
         return getPlayerDataAsync(uuid)
@@ -56,6 +71,18 @@ public class PlayerDataService {
                     return apiClient.updatePlayerDataAsync(uuid, playerData);
                 }).exceptionally(ex -> {
                     throw new PlayerDataUpdateException(uuid, ex.getCause());
+                });
+    }
+
+    public CompletableFuture<Void> deletePlayerDataAsync(UUID uuid, Consumer<PlayerData> updater) {
+        return getPlayerDataAsync(uuid)
+                .thenCompose(playerData -> {
+                    // Apply the lambda function to update the PlayerData object
+                    updater.accept(playerData);
+                    playerDataCache.put(playerData);
+                    return apiClient.deletePlayerDataAsync(uuid);
+                }).exceptionally(ex -> {
+                    throw new PlayerDataDeleteException(uuid, ex.getCause());
                 });
     }
 
@@ -82,6 +109,15 @@ public class PlayerDataService {
         try {
             // Block and wait for the asynchronous operation to complete
             updatePlayerDataAsync(uuid, updater).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new PlayerDataUpdateException(uuid, e);
+        }
+    }
+
+    public void deletePlayerData(UUID uuid, Consumer<PlayerData> updater) {
+        try {
+            // Block and wait for the asynchronous operation to complete
+            deletePlayerDataAsync(uuid, updater).get();
         } catch (InterruptedException | ExecutionException e) {
             throw new PlayerDataUpdateException(uuid, e);
         }

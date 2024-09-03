@@ -11,6 +11,8 @@ import java.time.format.DateTimeFormatter;
 public class Profile {
     @JsonProperty("registrationDate")
     private Long registrationDate;
+    @JsonProperty("lastActivity")
+    private Long lastActivity;
     @JsonProperty("bio")
     private String bio;
     @JsonProperty("pronouns")
@@ -22,8 +24,9 @@ public class Profile {
     @JsonProperty("flagged")
     private boolean flagged;
 
-    public Profile(Long registrationDate, String bio, String pronouns, int xenforoId, boolean discordLinked, boolean flagged) {
+    public Profile(Long registrationDate, Long lastActivity, String bio, String pronouns, int xenforoId, boolean discordLinked, boolean flagged) {
         this.registrationDate = registrationDate;
+        this.lastActivity = lastActivity;
         this.bio = bio;
         this.pronouns = pronouns;
         this.xenforoId = xenforoId;
@@ -38,6 +41,11 @@ public class Profile {
     @JsonIgnore
     public Long getRegistrationDate() {
         return (registrationDate == null) ? Instant.now().getEpochSecond() : registrationDate;
+    }
+
+    @JsonIgnore
+    public Long getLastActivity() {
+        return lastActivity;
     }
 
     // Method to get the formatted registration date with a custom pattern
@@ -84,6 +92,10 @@ public class Profile {
 
     public void setRegistrationDate(Long registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public void setLastActivity(Long lastActivity) {
+        this.lastActivity = lastActivity;
     }
 
     public int getXenforoId() {

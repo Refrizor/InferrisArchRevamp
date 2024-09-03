@@ -17,6 +17,7 @@ public class EventJoin implements Listener {
         this.playerDataService = playerDataService;
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     public void onSwitch(ServerSwitchEvent event) {
         ProxiedPlayer player = event.getPlayer();

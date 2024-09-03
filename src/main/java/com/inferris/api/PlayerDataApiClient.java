@@ -1,6 +1,8 @@
 package com.inferris.api;
 
 import com.google.inject.Inject;
+import com.inferris.exception.ApiClientException;
+import com.inferris.exception.PlayerDataUpdateException;
 import com.inferris.model.Channel;
 import com.inferris.model.PlayerData;
 import com.inferris.model.Profile;
@@ -40,13 +42,13 @@ public class PlayerDataApiClient {
                 } else if (response.code() == 404) {
                     future.complete(Optional.empty());
                 } else {
-                    future.completeExceptionally(new RuntimeException("Failed to fetch player data: " + response.code()));
+                    future.completeExceptionally(new ApiClientException("Failed to fetch player data: " + response.code(), null));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<ApiResponse<PlayerData>> call, @NotNull Throwable t) {
-                future.completeExceptionally(new RuntimeException("Failed to fetch player data", t));
+                future.completeExceptionally(new ApiClientException("Failed to fetch player data", t));
             }
         });
 
@@ -68,13 +70,13 @@ public class PlayerDataApiClient {
                 if (response.isSuccessful()) {
                     future.complete(newPlayerData);
                 } else {
-                    future.completeExceptionally(new RuntimeException("Failed to create player data: " + response.code()));
+                    future.completeExceptionally(new ApiClientException("Failed to create player data: " + response.code(), null));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
-                future.completeExceptionally(new RuntimeException("Failed to create player data", t));
+                future.completeExceptionally(new ApiClientException("Failed to create player data", t));
             }
         });
 
@@ -90,13 +92,13 @@ public class PlayerDataApiClient {
                 if (response.isSuccessful()) {
                     future.complete(null);  // Complete with null as there's no meaningful result to return
                 } else {
-                    future.completeExceptionally(new RuntimeException("Failed to update player data: " + response.code()));
+                    future.completeExceptionally(new PlayerDataUpdateException(uuid, null));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
-                future.completeExceptionally(new RuntimeException("Failed to update player data", t));
+                future.completeExceptionally(new PlayerDataUpdateException(uuid, t));
             }
         });
 

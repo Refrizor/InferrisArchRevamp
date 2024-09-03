@@ -21,7 +21,7 @@ public class EventJoin implements Listener {
     public void onSwitch(ServerSwitchEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        PlayerData playerData = playerDataService.getPlayerData(player.getUniqueId());
+        PlayerData playerData = playerDataService.fetchOrCreatePlayerData(player.getUniqueId());
         if(playerData.getRank().getStaff() > 1){
             ProxyServer.getInstance().broadcast(new TextComponent(ChatColor.AQUA + "A staff joined!"));
         }

@@ -24,20 +24,16 @@ public class PlayerDataService {
         // Try to get the player data from the cache
         return CompletableFuture.supplyAsync(() -> playerDataCache.get(uuid))
                 .thenCompose(optionalPlayerData -> {
-                    if (optionalPlayerData.isPresent()) {
-                        return CompletableFuture.completedFuture(optionalPlayerData.get());
-                    } else {
-                        // If not found in the cache, fetch from the API asynchronously
-                        return apiClient.fetchPlayerDataAsync(uuid)
-                                .thenApply(fetchedData -> {
-                                    if (fetchedData.isPresent()) {
-                                        playerDataCache.put(fetchedData.get());
-                                        return fetchedData.get();
-                                    } else {
-                                        throw new RuntimeException("Player data not found for UUID: " + uuid);
-                                    }
-                                });
-                    }
+                    // If not found in the cache, fetch from the API asynchronously
+                    return optionalPlayerData.<java.util.concurrent.CompletionStage<PlayerData>>map(CompletableFuture::completedFuture).orElseGet(() -> apiClient.fetchPlayerDataAsync(uuid)
+                            .thenApply(fetchedData -> {
+                                if (fetchedData.isPresent()) {
+                                    playerDataCache.put(fetchedData.get());
+                                    return fetchedData.get();
+                                } else {
+                                    throw new RuntimeException("Player data not found for UUID: " + uuid);
+                                }
+                            }));
                 });
     }
 

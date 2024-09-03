@@ -15,7 +15,7 @@ public class PlayerDataCache {
     @Inject
     public PlayerDataCache() {
         this.cache = Caffeine.newBuilder()
-                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .expireAfterWrite(30, TimeUnit.MINUTES)
                 .maximumSize(1000)
                 .build();
     }

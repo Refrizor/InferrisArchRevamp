@@ -34,8 +34,6 @@ public class PlayerDataService {
                                 .orElseThrow(() -> new PlayerDataNotFoundException(uuid))));
     }
 
-
-
     public CompletableFuture<PlayerData> fetchOrCreatePlayerDataAsync(UUID uuid) {
         return playerDataCache.get(uuid)
                 .map(CompletableFuture::completedFuture)
@@ -49,7 +47,6 @@ public class PlayerDataService {
                                         }))));
     }
 
-
     public CompletableFuture<Void> updatePlayerDataAsync(UUID uuid, Consumer<PlayerData> updater) {
         return getPlayerDataAsync(uuid)
                 .thenCompose(playerData -> {
@@ -61,7 +58,6 @@ public class PlayerDataService {
                     throw new PlayerDataUpdateException(uuid, ex.getCause());
                 });
     }
-
 
     // Synchronous wrapper method
     public PlayerData getPlayerData(UUID uuid) {

@@ -32,8 +32,6 @@ public class Inferris extends Plugin {
 
         PluginManager pluginManager = this.getProxy().getPluginManager();
         pluginManager.registerListener(this, new EventJoin(playerDataService));
-        pluginManager.registerCommand(this, new CommandPost("post", playerDataService));
-        pluginManager.registerCommand(this, new CommandGet("get", playerDataService));
         pluginManager.registerCommand(this, new CommandAPI("api", playerDataService, playerDataCache, playerDataApiClient));
     }
 

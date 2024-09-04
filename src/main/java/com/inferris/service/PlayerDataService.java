@@ -26,6 +26,10 @@ public class PlayerDataService {
         this.apiClient = apiClient;
     }
 
+    public void insert(UUID uuid){
+        apiClient.createPlayerDataAsync(uuid, "Bob");
+    }
+
     public CompletableFuture<PlayerData> getPlayerDataAsync(UUID uuid) {
         return playerDataCache.get(uuid)
                 .map(CompletableFuture::completedFuture)

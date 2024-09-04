@@ -1,12 +1,15 @@
 package com.inferris.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.inject.Inject;
+import com.inferris.Inferris;
 import com.inferris.exception.ApiClientException;
 import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataUpdateException;
 import com.inferris.model.*;
 import com.inferris.model.rank.StaffRank;
 import com.inferris.model.rank.SupporterRank;
+import com.inferris.utils.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +64,12 @@ public class PlayerDataApiClient {
         PlayerData newPlayerData = new PlayerData(uuid, username, new Rank(SupporterRank.NONE, StaffRank.NONE),
                 new Profile(joinDate, joinDate, null, null, 0, false, false), 0, Channel.NONE, false, Server.LOBBY,
                 new UserPreferences(true, false));
+
+        try {
+            Inferris.getInstance().getLogger().info(SerializationUtils.serializePlayerData(newPlayerData));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         CompletableFuture<PlayerData> future = new CompletableFuture<>();
 

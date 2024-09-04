@@ -24,4 +24,6 @@ public class Rank {
     public void setPlayerRank(PlayerRank playerRank) {
         this.playerRank = playerRank;
     }
+
+    Rank(){}
 }

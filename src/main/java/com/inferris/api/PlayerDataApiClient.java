@@ -56,7 +56,7 @@ public class PlayerDataApiClient {
     public CompletableFuture<PlayerData> createPlayerDataAsync(UUID uuid, String username) {
         long joinDate = Instant.now().getEpochSecond();
 
-        PlayerData newPlayerData = new PlayerData(uuid, username, new Rank(PackageRank.NONE, PlayerRank.NORMAL),
+        PlayerData newPlayerData = new PlayerData(uuid, username, new Rank(SupporterRank.NONE, StaffRank.NONE),
                 new Profile(joinDate, joinDate, null, null, 0, false, false), 0, Channel.NONE, false, Server.LOBBY);
 
         CompletableFuture<PlayerData> future = new CompletableFuture<>();

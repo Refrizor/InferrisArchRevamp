@@ -1,28 +1,28 @@
 package com.inferris.model;
 
 public class Rank {
-    private PackageRank packageRank;
-    private PlayerRank playerRank;
+    private SupporterRank supporterRank;
+    private StaffRank staffRank;
 
-    public Rank(PackageRank packageRank, PlayerRank playerRank){
-        this.packageRank = packageRank;
-        this.playerRank = playerRank;
+    public Rank(SupporterRank supporterRank, StaffRank staffRank){
+        this.supporterRank = supporterRank;
+        this.staffRank = staffRank;
     }
 
-    public PackageRank getPackageRank() {
-        return packageRank;
+    public SupporterRank getPackageRank() {
+        return supporterRank;
     }
 
-    public PlayerRank getPlayerRank() {
-        return playerRank;
+    public StaffRank getPlayerRank() {
+        return staffRank;
     }
 
-    public void setPackageRank(PackageRank packageRank) {
-        this.packageRank = packageRank;
+    public void setPackageRank(SupporterRank supporterRank) {
+        this.supporterRank = supporterRank;
     }
 
-    public void setPlayerRank(PlayerRank playerRank) {
-        this.playerRank = playerRank;
+    public void setPlayerRank(StaffRank staffRank) {
+        this.staffRank = staffRank;
     }
 
     Rank(){}

@@ -6,9 +6,9 @@ import com.inferris.cache.PlayerDataCache;
 import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataNotFoundException;
 import com.inferris.exception.PlayerDataUpdateException;
-import com.inferris.model.PackageRank;
+import com.inferris.model.SupporterRank;
 import com.inferris.model.PlayerData;
-import com.inferris.model.PlayerRank;
+import com.inferris.model.StaffRank;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -127,16 +127,16 @@ public class PlayerDataService {
 
     public String getHighestRankDisplayTag(UUID uuid) {
         PlayerData playerData = this.getPlayerData(uuid);
-        PackageRank packageRank = playerData.getRank().getPackageRank();
-        PlayerRank playerRank = playerData.getRank().getPlayerRank();
-        // If PlayerRank is higher than NORMAL, return PlayerRank's display tag
-        if (playerRank.getId() > PlayerRank.NORMAL.getId() && playerRank.getDisplayTag() != null) {
-            return playerRank.getDisplayTag();
+        SupporterRank supporterRank = playerData.getRank().getPackageRank();
+        StaffRank staffRank = playerData.getRank().getPlayerRank();
+        // If PlayerRank is higher than NONE, return PlayerRank's display tag
+        if (staffRank.getId() > StaffRank.NONE.getId() && staffRank.getDisplayTag() != null) {
+            return staffRank.getDisplayTag();
         }
 
         // Otherwise, return PackageRank's display tag (if it exists)
-        if (packageRank.getDisplayTag() != null) {
-            return packageRank.getDisplayTag();
+        if (supporterRank.getDisplayTag() != null) {
+            return supporterRank.getDisplayTag();
         }
 
         // Default if no ranks are available
@@ -145,8 +145,8 @@ public class PlayerDataService {
 
     public boolean hasRank(UUID uuid){
         PlayerData playerData = this.getPlayerData(uuid);
-        PackageRank packageRank = playerData.getRank().getPackageRank();
-        PlayerRank playerRank = playerData.getRank().getPlayerRank();
-        return packageRank.getId() > 0 || playerRank.getId() > 0;
+        SupporterRank supporterRank = playerData.getRank().getPackageRank();
+        StaffRank staffRank = playerData.getRank().getPlayerRank();
+        return supporterRank.getId() > 0 || staffRank.getId() > 0;
     }
 }

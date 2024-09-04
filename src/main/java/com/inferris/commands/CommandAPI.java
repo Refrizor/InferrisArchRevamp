@@ -1,9 +1,9 @@
 package com.inferris.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.inferris.model.PackageRank;
+import com.inferris.model.SupporterRank;
 import com.inferris.model.PlayerData;
-import com.inferris.model.PlayerRank;
+import com.inferris.model.StaffRank;
 import com.inferris.utils.SerializationUtils;
 import com.inferris.cache.PlayerDataCache;
 import com.inferris.service.PlayerDataService;
@@ -50,7 +50,7 @@ public class CommandAPI extends Command {
                 }
                 case "update" -> {
                     playerDataService.updatePlayerData(DEBUG_UUID, playerData -> {
-                        playerData.getRank().setPlayerRank(PlayerRank.ADMIN);
+                        playerData.getRank().setPlayerRank(StaffRank.ADMIN);
                     });
                 }
             }
@@ -63,7 +63,7 @@ public class CommandAPI extends Command {
                 case "updaterank" -> {
                     try {
                         playerDataService.updatePlayerData(uuid, playerData2 -> {
-                            playerData2.getRank().setPlayerRank(PlayerRank.valueOf(rankArg));
+                            playerData2.getRank().setPlayerRank(StaffRank.valueOf(rankArg));
                         });
                         sender.sendMessage(new TextComponent("Updated rank to: " + rankArg));
                     } catch (IllegalArgumentException e) {
@@ -73,9 +73,9 @@ public class CommandAPI extends Command {
                 case "updatepackagerank" -> {
                     try {
                         playerDataService.updatePlayerData(uuid, playerData2 -> {
-                            playerData2.getRank().setPackageRank(PackageRank.valueOf(args[2].toUpperCase()));
+                            playerData2.getRank().setPackageRank(SupporterRank.valueOf(args[2].toUpperCase()));
                         });
-                        sender.sendMessage(new TextComponent("Updated rank to: " + PackageRank.valueOf(args[2])));
+                        sender.sendMessage(new TextComponent("Updated rank to: " + SupporterRank.valueOf(args[2])));
                     } catch (IllegalArgumentException e) {
                         sender.sendMessage(new TextComponent("Invalid staff value: " + args[2]));
                     }

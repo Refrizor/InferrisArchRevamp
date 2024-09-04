@@ -12,19 +12,19 @@ public class Rank {
         this.staffRank = staffRank;
     }
 
-    public SupporterRank getPackageRank() {
+    public SupporterRank getSupporterRank() {
         return supporterRank;
     }
 
-    public StaffRank getPlayerRank() {
+    public StaffRank getStaffRank() {
         return staffRank;
     }
 
-    public void setPackageRank(SupporterRank supporterRank) {
+    public void setSupporterRank(SupporterRank supporterRank) {
         this.supporterRank = supporterRank;
     }
 
-    public void setPlayerRank(StaffRank staffRank) {
+    public void setStaffRank(StaffRank staffRank) {
         this.staffRank = staffRank;
     }
 

@@ -127,8 +127,8 @@ public class PlayerDataService {
 
     public String getHighestRankDisplayTag(UUID uuid) {
         PlayerData playerData = this.getPlayerData(uuid);
-        SupporterRank supporterRank = playerData.getRank().getPackageRank();
-        StaffRank staffRank = playerData.getRank().getPlayerRank();
+        SupporterRank supporterRank = playerData.getRank().getSupporterRank();
+        StaffRank staffRank = playerData.getRank().getStaffRank();
         // If PlayerRank is higher than NONE, return PlayerRank's display tag
         if (staffRank.getId() > StaffRank.NONE.getId() && staffRank.getDisplayTag() != null) {
             return staffRank.getDisplayTag();
@@ -145,8 +145,8 @@ public class PlayerDataService {
 
     public boolean hasRank(UUID uuid){
         PlayerData playerData = this.getPlayerData(uuid);
-        SupporterRank supporterRank = playerData.getRank().getPackageRank();
-        StaffRank staffRank = playerData.getRank().getPlayerRank();
+        SupporterRank supporterRank = playerData.getRank().getSupporterRank();
+        StaffRank staffRank = playerData.getRank().getStaffRank();
         return supporterRank.getId() > 0 || staffRank.getId() > 0;
     }
 }

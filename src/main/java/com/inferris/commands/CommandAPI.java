@@ -50,7 +50,7 @@ public class CommandAPI extends Command {
                 }
                 case "update" -> {
                     playerDataService.updatePlayerData(DEBUG_UUID, playerData -> {
-                        playerData.getRank().setPlayerRank(StaffRank.ADMIN);
+                        playerData.getRank().setStaffRank(StaffRank.ADMIN);
                     });
                 }
             }
@@ -60,24 +60,24 @@ public class CommandAPI extends Command {
             UUID uuid = UUID.fromString(args[1]);
             String rankArg = args[2].toUpperCase();
             switch (args[0].toLowerCase()) {
-                case "updaterank" -> {
+                case "updatestaff" -> {
                     try {
                         playerDataService.updatePlayerData(uuid, playerData2 -> {
-                            playerData2.getRank().setPlayerRank(StaffRank.valueOf(rankArg));
+                            playerData2.getRank().setStaffRank(StaffRank.valueOf(rankArg));
                         });
                         sender.sendMessage(new TextComponent("Updated rank to: " + rankArg));
                     } catch (IllegalArgumentException e) {
                         sender.sendMessage(new TextComponent("Invalid staff value: " + rankArg));
                     }
                 }
-                case "updatepackagerank" -> {
+                case "updatedonor" -> {
                     try {
                         playerDataService.updatePlayerData(uuid, playerData2 -> {
-                            playerData2.getRank().setPackageRank(SupporterRank.valueOf(args[2].toUpperCase()));
+                            playerData2.getRank().setSupporterRank(SupporterRank.valueOf(args[2].toUpperCase()));
                         });
-                        sender.sendMessage(new TextComponent("Updated rank to: " + SupporterRank.valueOf(args[2])));
+                        sender.sendMessage(new TextComponent("Updated donor to: " + SupporterRank.valueOf(args[2])));
                     } catch (IllegalArgumentException e) {
-                        sender.sendMessage(new TextComponent("Invalid staff value: " + args[2]));
+                        sender.sendMessage(new TextComponent("Invalid donor value: " + args[2]));
                     }
                 }
                 case "get" -> {

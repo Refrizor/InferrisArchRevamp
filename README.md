@@ -1,5 +1,5 @@
 # Proxy
-This is the newly developed player data architecture for Inferris that works with the Inferris [REST API](https://github.com/inferris-com/InferrisAPI) microservice. This will be integrated into the private proxy plugin's current architecture.
+This is the newly developed player data architecture for Inferris that works with the [Inferris REST API](https://github.com/inferris-com/InferrisAPI) microservice. This will be integrated into the private proxy plugin's current architecture.
 
 A lot of the content are just debugging scenarios and examples, and may not reflect what is actually shown on the Minecraft network.
 

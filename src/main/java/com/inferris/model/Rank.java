@@ -1,5 +1,8 @@
 package com.inferris.model;
 
+import com.inferris.model.rank.StaffRank;
+import com.inferris.model.rank.SupporterRank;
+
 public class Rank {
     private SupporterRank supporterRank;
     private StaffRank staffRank;

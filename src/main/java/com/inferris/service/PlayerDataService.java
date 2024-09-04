@@ -6,9 +6,9 @@ import com.inferris.cache.PlayerDataCache;
 import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataNotFoundException;
 import com.inferris.exception.PlayerDataUpdateException;
-import com.inferris.model.SupporterRank;
+import com.inferris.model.rank.SupporterRank;
 import com.inferris.model.PlayerData;
-import com.inferris.model.StaffRank;
+import com.inferris.model.rank.StaffRank;
 
 import java.util.Optional;
 import java.util.UUID;

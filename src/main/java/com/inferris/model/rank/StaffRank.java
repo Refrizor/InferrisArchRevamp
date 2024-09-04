@@ -1,4 +1,4 @@
-package com.inferris.model;
+package com.inferris.model.rank;
 
 import com.inferris.utils.DisplayTag;
 import net.md_5.bungee.api.ChatColor;

@@ -1,9 +1,9 @@
 package com.inferris.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.inferris.model.SupporterRank;
+import com.inferris.model.rank.SupporterRank;
 import com.inferris.model.PlayerData;
-import com.inferris.model.StaffRank;
+import com.inferris.model.rank.StaffRank;
 import com.inferris.utils.SerializationUtils;
 import com.inferris.cache.PlayerDataCache;
 import com.inferris.service.PlayerDataService;

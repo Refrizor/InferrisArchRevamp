@@ -5,6 +5,8 @@ import com.inferris.exception.ApiClientException;
 import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataUpdateException;
 import com.inferris.model.*;
+import com.inferris.model.rank.StaffRank;
+import com.inferris.model.rank.SupporterRank;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;

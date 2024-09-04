@@ -1,7 +1,7 @@
 # Proxy
-This is the newly developed Inferris player data architecture that works with the REST API microservice. Includes just some of the features.
-This was made public, and will be merged into the actual BungeeCord proxy plugin.
-This will likely be kept up for the time being as an old source to get a timelapse of how our architecture has improved.
+This is the newly developed Inferris player data architecture that works with the REST API microservice. Includes just some of the features, and is not the actual proxy plugin.
+This was made public, and will be merged into the actual BungeeCord proxy plugin's architecture.
+This repository will likely be kept up for the time being as an old source to get a timelapse of how our architecture has improved.
 
 A lot of the content are just debugging scenarios and examples, and may not reflect what is actually shown on the Minecraft network.
 
@@ -29,3 +29,11 @@ Player Data is setup to be serialized, and acts as a Data Transfer Object (DTO) 
 - Current channel
 - Vanish status: true or false
 - Current server
+
+## Future plans:
+- More API endpoints
+- Preferences
+- - Always vanish?
+  - Opt out of friendly join messages?
+- Nickname system
+- Achievements?

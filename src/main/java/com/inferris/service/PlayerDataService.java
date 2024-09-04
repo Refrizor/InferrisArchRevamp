@@ -6,9 +6,10 @@ import com.inferris.cache.PlayerDataCache;
 import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataNotFoundException;
 import com.inferris.exception.PlayerDataUpdateException;
-import com.inferris.model.PackageRank;
+import com.inferris.model.Rank;
+import com.inferris.model.rank.DonorRank;
 import com.inferris.model.PlayerData;
-import com.inferris.model.PlayerRank;
+import com.inferris.model.rank.StaffRank;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -127,26 +128,36 @@ public class PlayerDataService {
 
     public String getHighestRankDisplayTag(UUID uuid) {
         PlayerData playerData = this.getPlayerData(uuid);
-        PackageRank packageRank = playerData.getRank().getPackageRank();
-        PlayerRank playerRank = playerData.getRank().getPlayerRank();
-        // If PlayerRank is higher than NORMAL, return PlayerRank's display tag
-        if (playerRank.getId() > PlayerRank.NORMAL.getId() && playerRank.getDisplayTag() != null) {
-            return playerRank.getDisplayTag();
+        Rank rank = playerData.getRank();
+
+        // Retrieve the relevant ranks
+        StaffRank staffRank = StaffRank.getById(rank.getStaff());
+        DonorRank donorRank = DonorRank.getById(rank.getDonor());
+
+        // Check if StaffRank is higher than NORMAL and has a display tag
+        if (staffRank.getId() > StaffRank.NONE.getId() && staffRank.getDisplayTag() != null) {
+            return staffRank.getDisplayTag();
         }
 
-        // Otherwise, return PackageRank's display tag (if it exists)
-        if (packageRank.getDisplayTag() != null) {
-            return packageRank.getDisplayTag();
+        // Otherwise, return DonorRank's display tag (if it exists)
+        if (donorRank.getDisplayTag() != null) {
+            return donorRank.getDisplayTag();
         }
 
         // Default if no ranks are available
         return "";
     }
 
-    public boolean hasRank(UUID uuid){
+
+    public boolean hasRank(UUID uuid) {
         PlayerData playerData = this.getPlayerData(uuid);
-        PackageRank packageRank = playerData.getRank().getPackageRank();
-        PlayerRank playerRank = playerData.getRank().getPlayerRank();
-        return packageRank.getId() > 0 || playerRank.getId() > 0;
+        Rank rank = playerData.getRank();
+
+        // Retrieve ranks from different categories
+        StaffRank staffRank = StaffRank.getById(rank.getStaff());
+        DonorRank donorRank = DonorRank.getById(rank.getDonor());
+
+        // Check if the player has any rank greater than NONE in any category
+        return staffRank.getId() > 0 || donorRank.getId() > 0;
     }
 }

@@ -23,7 +23,9 @@ public class CommandProfile extends Command {
         if(sender instanceof ProxiedPlayer player){
             PlayerData playerData = playerDataService.getPlayerData(player.getUniqueId());
 
-            player.sendMessage(new TextComponent("All ranks: " + playerData.getRank().getPlayerRank().name()));
+            player.sendMessage(new TextComponent("Highest rank : " + playerDataService.getHighestRankDisplayTag(player.getUniqueId())));
+            player.sendMessage(new TextComponent("Staff : " + playerData.getRank().getStaff()));
+            player.sendMessage(new TextComponent("Donor : " + playerData.getRank().getDonor()));
         }
     }
 }

@@ -26,7 +26,7 @@ public class EventJoin implements Listener {
         UUID playerUuid = player.getUniqueId();
 
         PlayerData playerData = playerDataService.fetchOrCreatePlayerData(player.getUniqueId());
-        if (playerData.getRank().getPlayerRank().getId() > 0) {
+        if (playerData.getRank().getStaff() > 0) {
             ProxyServer.getInstance().broadcast(new TextComponent(ChatColor.AQUA + "A staff joined!"));
         }
 

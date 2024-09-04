@@ -15,8 +15,7 @@ public class PlayerDataSerializer extends JsonSerializer<PlayerData> {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("uuid", playerData.getUuid().toString());
         jsonGenerator.writeStringField("username", playerData.getUsername());
-        jsonGenerator.writeObjectField("packageRank", playerData.getPackageRank());
-        jsonGenerator.writeObjectField("playerRank", playerData.getPlayerRank());
+        jsonGenerator.writeObjectField("rank", playerData.getRank());
         jsonGenerator.writeObjectField("profile", playerData.getProfile());
         jsonGenerator.writeObjectField("coins", playerData.getCoins());
         jsonGenerator.writeObjectField("channel", playerData.getChannel());

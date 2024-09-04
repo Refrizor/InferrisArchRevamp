@@ -6,19 +6,17 @@ import java.util.UUID;
 public class PlayerData implements Serializable {
     private UUID uuid;
     private String username;
-    private PackageRank packageRank;
-    private PlayerRank playerRank;
+    private Rank rank;
     private Profile profile;
     private int coins;
     private Channel channel;
     private boolean vanished;
     private Server currentServer;
 
-    public PlayerData(UUID uuid, String username, PackageRank packageRank, PlayerRank playerRank, Profile profile, int coins, Channel channel, boolean vanished, Server currentServer) {
+    public PlayerData(UUID uuid, String username, Rank rank, Profile profile, int coins, Channel channel, boolean vanished, Server currentServer) {
         this.uuid = uuid;
         this.username = username;
-        this.packageRank = packageRank;
-        this.playerRank = playerRank;
+        this.rank = rank;
         this.profile = profile;
         this.coins = coins;
         this.channel = channel;
@@ -34,12 +32,8 @@ public class PlayerData implements Serializable {
         return uuid;
     }
 
-    public PackageRank getPackageRank() {
-        return packageRank;
-    }
-
-    public PlayerRank getPlayerRank() {
-        return playerRank;
+    public Rank getRank() {
+        return rank;
     }
 
     public Profile getProfile() {
@@ -64,14 +58,6 @@ public class PlayerData implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public void setPackageRank(PackageRank packageRank) {
-        this.packageRank = packageRank;
-    }
-
-    public void setPlayerRank(PlayerRank playerRank) {
-        this.playerRank = playerRank;
     }
 
     public void setCoins(int amount) {

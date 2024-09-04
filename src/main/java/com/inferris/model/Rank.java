@@ -1,50 +1,27 @@
 package com.inferris.model;
 
 public class Rank {
-    private int staff;
-    private int builder;
-    private int donor;
-    private int other;
+    private PackageRank packageRank;
+    private PlayerRank playerRank;
 
-    public Rank(int staff, int builder, int donor, int other) {
-        this.staff = staff;
-        this.builder = builder;
-        this.donor = donor;
-        this.other = other;
+    public Rank(PackageRank packageRank, PlayerRank playerRank){
+        this.packageRank = packageRank;
+        this.playerRank = playerRank;
     }
 
-    public Rank(){
+    public PackageRank getPackageRank() {
+        return packageRank;
     }
 
-    public int getStaff() {
-        return staff;
+    public PlayerRank getPlayerRank() {
+        return playerRank;
     }
 
-    public int getBuilder() {
-        return builder;
+    public void setPackageRank(PackageRank packageRank) {
+        this.packageRank = packageRank;
     }
 
-    public int getDonor() {
-        return donor;
-    }
-
-    public int getOther() {
-        return other;
-    }
-
-    public void setStaff(int staff) {
-        this.staff = staff;
-    }
-
-    public void setBuilder(int builder) {
-        this.builder = builder;
-    }
-
-    public void setDonor(int donor) {
-        this.donor = donor;
-    }
-
-    public void setOther(int other) {
-        this.other = other;
+    public void setPlayerRank(PlayerRank playerRank) {
+        this.playerRank = playerRank;
     }
 }

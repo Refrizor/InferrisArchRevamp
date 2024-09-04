@@ -50,7 +50,7 @@ public class CommandAPI extends Command {
                 }
                 case "update" -> {
                     playerDataService.updatePlayerData(DEBUG_UUID, playerData -> {
-                        playerData.setPlayerRank(PlayerRank.ADMIN);
+                        playerData.getRank().setPlayerRank(PlayerRank.ADMIN);
                     });
                 }
             }
@@ -63,7 +63,7 @@ public class CommandAPI extends Command {
                 case "updaterank" -> {
                     try {
                         playerDataService.updatePlayerData(uuid, playerData2 -> {
-                            playerData2.setPlayerRank(PlayerRank.valueOf(rankArg));
+                            playerData2.getRank().setPlayerRank(PlayerRank.valueOf(rankArg));
                         });
                         sender.sendMessage(new TextComponent("Updated rank to: " + rankArg));
                     } catch (IllegalArgumentException e) {
@@ -73,7 +73,7 @@ public class CommandAPI extends Command {
                 case "updatepackagerank" -> {
                     try {
                         playerDataService.updatePlayerData(uuid, playerData2 -> {
-                            playerData2.setPackageRank(PackageRank.valueOf(args[2].toUpperCase()));
+                            playerData2.getRank().setPackageRank(PackageRank.valueOf(args[2].toUpperCase()));
                         });
                         sender.sendMessage(new TextComponent("Updated rank to: " + PackageRank.valueOf(args[2])));
                     } catch (IllegalArgumentException e) {

@@ -21,6 +21,7 @@ public class PlayerDataSerializer extends JsonSerializer<PlayerData> {
         jsonGenerator.writeObjectField("channel", playerData.getChannel());
         jsonGenerator.writeObjectField("vanished", playerData.isVanished());
         jsonGenerator.writeObjectField("currentServer", playerData.getCurrentServer());
+        jsonGenerator.writeObjectField("userPreferences", playerData.getUserPreferences());
         jsonGenerator.writeEndObject();
     }
 }

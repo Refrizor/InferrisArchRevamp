@@ -12,8 +12,9 @@ public class PlayerData implements Serializable {
     private Channel channel;
     private boolean vanished;
     private Server currentServer;
+    private UserPreferences userPreferences;
 
-    public PlayerData(UUID uuid, String username, Rank rank, Profile profile, int coins, Channel channel, boolean vanished, Server currentServer) {
+    public PlayerData(UUID uuid, String username, Rank rank, Profile profile, int coins, Channel channel, boolean vanished, Server currentServer, UserPreferences userPreferences) {
         this.uuid = uuid;
         this.username = username;
         this.rank = rank;
@@ -22,6 +23,7 @@ public class PlayerData implements Serializable {
         this.channel = channel;
         this.vanished = vanished;
         this.currentServer = currentServer;
+        this.userPreferences = userPreferences;
     }
 
     public String getUsername() {
@@ -56,6 +58,10 @@ public class PlayerData implements Serializable {
         return currentServer;
     }
 
+    public UserPreferences getUserPreferences() {
+        return userPreferences;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -74,6 +80,10 @@ public class PlayerData implements Serializable {
 
     public void setCurrentServer(Server currentServer) {
         this.currentServer = currentServer;
+    }
+
+    public void setUserPreferences(UserPreferences userPreferences) {
+        this.userPreferences = userPreferences;
     }
 
     PlayerData(){}

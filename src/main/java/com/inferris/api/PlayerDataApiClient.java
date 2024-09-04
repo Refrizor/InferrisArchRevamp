@@ -4,11 +4,7 @@ import com.google.inject.Inject;
 import com.inferris.exception.ApiClientException;
 import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataUpdateException;
-import com.inferris.model.Channel;
-import com.inferris.model.PlayerData;
-import com.inferris.model.Profile;
-import com.inferris.model.Rank;
-import com.inferris.model.Server;
+import com.inferris.model.*;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +56,7 @@ public class PlayerDataApiClient {
     public CompletableFuture<PlayerData> createPlayerDataAsync(UUID uuid, String username) {
         long joinDate = Instant.now().getEpochSecond();
 
-        PlayerData newPlayerData = new PlayerData(uuid, username, new Rank(0, 0, 0, 0),
+        PlayerData newPlayerData = new PlayerData(uuid, username, PackageRank.NONE, PlayerRank.NORMAL,
                 new Profile(joinDate, joinDate, null, null, 0, false, false), 0, Channel.NONE, false, Server.LOBBY);
 
         CompletableFuture<PlayerData> future = new CompletableFuture<>();

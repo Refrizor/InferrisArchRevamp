@@ -6,7 +6,9 @@ import com.inferris.cache.PlayerDataCache;
 import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataNotFoundException;
 import com.inferris.exception.PlayerDataUpdateException;
+import com.inferris.model.PackageRank;
 import com.inferris.model.PlayerData;
+import com.inferris.model.PlayerRank;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -121,5 +123,30 @@ public class PlayerDataService {
         } catch (InterruptedException | ExecutionException e) {
             throw new PlayerDataUpdateException(uuid, e);
         }
+    }
+
+    public String getHighestRankDisplayTag(UUID uuid) {
+        PlayerData playerData = this.getPlayerData(uuid);
+        PackageRank packageRank = playerData.getPackageRank();
+        PlayerRank playerRank = playerData.getPlayerRank();
+        // If PlayerRank is higher than NORMAL, return PlayerRank's display tag
+        if (playerRank.getId() > PlayerRank.NORMAL.getId() && playerRank.getDisplayTag() != null) {
+            return playerRank.getDisplayTag();
+        }
+
+        // Otherwise, return PackageRank's display tag (if it exists)
+        if (packageRank.getDisplayTag() != null) {
+            return packageRank.getDisplayTag();
+        }
+
+        // Default if no ranks are available
+        return "";
+    }
+
+    public boolean hasRank(UUID uuid){
+        PlayerData playerData = this.getPlayerData(uuid);
+        PackageRank packageRank = playerData.getPackageRank();
+        PlayerRank playerRank = playerData.getPlayerRank();
+        return packageRank.getId() > 0 || playerRank.getId() > 0;
     }
 }

@@ -10,6 +10,8 @@ import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.UUID;
+
 public class EventJoin implements Listener {
     private final PlayerDataService playerDataService;
 
@@ -21,12 +23,18 @@ public class EventJoin implements Listener {
     @EventHandler
     public void onSwitch(ServerSwitchEvent event) {
         ProxiedPlayer player = event.getPlayer();
+        UUID playerUuid = player.getUniqueId();
 
         PlayerData playerData = playerDataService.fetchOrCreatePlayerData(player.getUniqueId());
-        if(playerData.getRank().getStaff() > 1){
+        if(playerData.getPlayerRank().getId() > 0){
             ProxyServer.getInstance().broadcast(new TextComponent(ChatColor.AQUA + "A staff joined!"));
 
-            // Add more debug things here
+            String displayTag = playerDataService.getHighestRankDisplayTag(playerUuid);
+            if(playerDataService.hasRank(playerUuid)){
+                ProxyServer.getInstance().broadcast(TextComponent.fromLegacy(displayTag + " " + ChatColor.RESET + player.getName() + ChatColor.GRAY + " joined!"));
+                return;
+            }
+            ProxyServer.getInstance().broadcast(new TextComponent(player.getName() + ChatColor.GRAY + " joined!"));
         }
     }
 }

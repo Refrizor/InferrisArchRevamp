@@ -1,7 +1,5 @@
 # Proxy
-This is the newly developed Inferris player data architecture that works with the REST API microservice. Includes just some of the features, and is not the actual proxy plugin.
-This was made public, and will be merged into the actual BungeeCord proxy plugin's architecture.
-This repository will likely be kept up for the time being as an old source to get a timelapse of how our architecture has improved.
+This is the newly developed player data architecture for Inferris that works with the REST API microservice. This will be integrated into the private proxy plugin's current architecture.
 
 A lot of the content are just debugging scenarios and examples, and may not reflect what is actually shown on the Minecraft network.
 

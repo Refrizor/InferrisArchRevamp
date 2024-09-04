@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.inferris.api.PlayerDataApiClient;
 import com.inferris.commands.CommandAPI;
 import com.inferris.cache.PlayerDataCache;
+import com.inferris.events.EventJoin;
 import com.inferris.module.PlayerDataModule;
 import com.inferris.service.PlayerDataService;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -25,6 +26,7 @@ public class Inferris extends Plugin {
 
         PluginManager pluginManager = this.getProxy().getPluginManager();
         pluginManager.registerCommand(this, new CommandAPI("api", playerDataService, playerDataCache));
+        pluginManager.registerListener(this, new EventJoin(playerDataService));
     }
 
     @Override

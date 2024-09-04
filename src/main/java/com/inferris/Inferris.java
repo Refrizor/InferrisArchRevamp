@@ -13,7 +13,6 @@ import com.inferris.service.PlayerDataService;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
-
 public class Inferris extends Plugin {
     private static Inferris instance;
     private final ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();

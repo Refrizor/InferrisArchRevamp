@@ -7,9 +7,5 @@ website: https://inferris.com
 database: true
 
 commands:
-  post:
-    description: Post
-  get:
-    description: Get
   api:
     description: API

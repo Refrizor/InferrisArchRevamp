@@ -79,12 +79,15 @@ public class PlayerDataApiClient {
                 if (response.isSuccessful()) {
                     future.complete(newPlayerData);
                 } else {
+                    Inferris.getInstance().getLogger().severe(response.message());
+
                     future.completeExceptionally(new ApiClientException("Failed to create player data: " + response.code(), null));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
+                t.printStackTrace();
                 future.completeExceptionally(new ApiClientException("Failed to create player data", t));
             }
         });

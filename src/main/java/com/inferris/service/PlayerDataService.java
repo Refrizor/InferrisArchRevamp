@@ -9,6 +9,7 @@ import com.inferris.exception.PlayerDataUpdateException;
 import com.inferris.model.rank.SupporterRank;
 import com.inferris.model.PlayerData;
 import com.inferris.model.rank.StaffRank;
+import com.inferris.utils.DisplayTag;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -129,23 +130,25 @@ public class PlayerDataService {
         }
     }
 
-    public String getHighestRankDisplayTag(UUID uuid) {
+    public DisplayTag getHighestRankDisplayTag(UUID uuid) {
         PlayerData playerData = this.getPlayerData(uuid);
         SupporterRank supporterRank = playerData.getRank().getSupporterRank();
         StaffRank staffRank = playerData.getRank().getStaffRank();
-        // If PlayerRank is higher than NONE, return PlayerRank's display tag
+
+        // If StaffRank is higher than NONE, return the StaffRank's DisplayTag
         if (staffRank.getId() > StaffRank.NONE.getId() && staffRank.getDisplayTag() != null) {
             return staffRank.getDisplayTag();
         }
 
-        // Otherwise, return PackageRank's display tag (if it exists)
+        // Otherwise, return the SupporterRank's DisplayTag (if it exists)
         if (supporterRank.getDisplayTag() != null) {
             return supporterRank.getDisplayTag();
         }
 
-        // Default if no ranks are available
-        return "";
+        // Default to null if no ranks are available
+        return null;  // You could also return an optional default DisplayTag if needed
     }
+
 
     public boolean hasRank(UUID uuid){
         PlayerData playerData = this.getPlayerData(uuid);

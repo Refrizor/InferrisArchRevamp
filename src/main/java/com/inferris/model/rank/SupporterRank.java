@@ -1,17 +1,17 @@
 package com.inferris.model.rank;
 
-import net.md_5.bungee.api.ChatColor;
+import com.inferris.utils.DisplayTag;
 
 public enum SupporterRank {
     NONE(1, null),
-    SUPPORTER(2, ChatColor.AQUA + "[Supporter]"),
-    SUPPORTER2(3, ChatColor.AQUA + "[Supporter 2 Test]"),
+    SUPPORTER(2, null),
+    SUPPORTER2(3, null),
     ;
 
     private final int id;
-    private final String displayTag;  // New field for the display tag
+    private final DisplayTag displayTag;  // New field for the display tag
 
-    SupporterRank(int id, String displayTag) {
+    SupporterRank(int id, DisplayTag displayTag) {
         this.id = id;
         this.displayTag = displayTag;
     }
@@ -20,7 +20,7 @@ public enum SupporterRank {
         return id;
     }
 
-    public String getDisplayTag() {
+    public DisplayTag getDisplayTag() {
         return displayTag;
     }
 }

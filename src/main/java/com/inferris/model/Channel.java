@@ -1,11 +1,11 @@
 package com.inferris.model;
 
 import com.inferris.rank.Branch;
-import net.md_5.bungee.api.ChatColor;
+import com.inferris.utils.ColorPalette;
 
 public enum Channel {
-    STAFF(Branch.STAFF, 1, ChatColor.AQUA + "[STAFF]"),
-    ADMIN(Branch.STAFF, 3, ChatColor.RED + "[ADMIN]"),
+    STAFF(Branch.STAFF, 1, ColorPalette.BLUE + "[STAFF]"),
+    ADMIN(Branch.STAFF, 3, ColorPalette.RED + "[ADMIN]"),
     SPECIAL(Branch.OTHER, 1, "SPECIAL"),
     NONE(null, 0, "NONE");
 
@@ -34,7 +34,7 @@ public enum Channel {
 
     public String getTag(boolean hasSpacer) {
         if (hasSpacer) {
-            return tag + ChatColor.RESET + " ";
+            return tag + ColorPalette.RESET + " ";
         }
         return tag;
     }

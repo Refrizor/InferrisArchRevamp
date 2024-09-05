@@ -1,51 +1,51 @@
 package com.inferris.utils;
 
-import java.awt.*;
+import net.kyori.adventure.text.format.TextColor;
 
 public final class ColorPalette {
-    public static final char COLOR_CHAR = '§'; // Used to format the color in strings (optional)
 
-    // Predefined colors
-    public static final ColorPalette BLACK = new ColorPalette(new Color(0, 0, 0));
-    public static final ColorPalette RED = new ColorPalette(new Color(255, 88, 51));
-    public static final ColorPalette GREEN = new ColorPalette(new Color(85, 255, 85));
-    public static final ColorPalette BLUE = new ColorPalette(new Color(85, 85, 255));
+    // Predefined colors using TextColor from Adventure API
+    public static final ColorPalette RESET = new ColorPalette(TextColor.color(255, 255, 255));
+    public static final ColorPalette BLACK = new ColorPalette(TextColor.color(0, 0, 0));
+    public static final ColorPalette RED = new ColorPalette(TextColor.color(255, 88, 51));
+    public static final ColorPalette DARK_GRAY = new ColorPalette(TextColor.color(70, 70, 70));
+    public static final ColorPalette GREEN = new ColorPalette(TextColor.color(85, 255, 85));
+    public static final ColorPalette BLUE = new ColorPalette(TextColor.color(85, 85, 255));
 
-    private final Color color; // Stores the actual Color object
+    private final TextColor color; // Stores the actual TextColor object
 
-    // Constructor without the 'code' field
-    private ColorPalette(Color color) {
+    // Constructor accepting a TextColor object
+    private ColorPalette(TextColor color) {
         this.color = color;
     }
 
-    // Optional getter for the actual Color object
-    public Color getColor() {
+    // Getter for the TextColor object
+    public TextColor getColor() {
         return color;
     }
 
-    // Converts the color to a string format, here for example purposes using hex
+    // Converts the color to a Minecraft-friendly hex string format
     @Override
     public String toString() {
-        String hex = String.format("%06x", color.getRGB() & 0xFFFFFF); // Get the 6-digit hex code
+        String hex = String.format("%06x", color.value() & 0xFFFFFF); // Get the 6-digit hex code
         StringBuilder minecraftHex = new StringBuilder("§x");
 
+        // Loop through the hex characters to format it with § for Minecraft
         for (char hexChar : hex.toCharArray()) {
             minecraftHex.append('§').append(hexChar);
         }
 
-        return minecraftHex.toString(); // Outputs §x§f§f§5§8§3§3 for #ff5833
+        return minecraftHex.toString(); // Outputs something like §x§f§f§5§8§3§3 for #ff5833
     }
 
-    // Strip color codes from strings (if needed)
-    public static String stripColor(String input) {
-        if (input == null) {
-            return null;
-        }
-        return input.replaceAll(COLOR_CHAR + "[0-9A-Fa-fK-Ok-or]", "");
+    // Static factory method for creating custom colors
+    public static ColorPalette fromRGB(int r, int g, int b) {
+        return new ColorPalette(TextColor.color(r, g, b));
     }
 
-    // Translate color codes in text using alternate color chars
-    public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
-        return textToTranslate.replace(altColorChar, COLOR_CHAR);
+    // Static factory method for creating from hex string
+    public static ColorPalette fromHexString(String hex) {
+        TextColor textColor = TextColor.fromHexString(hex);
+        return textColor != null ? new ColorPalette(textColor) : null;
     }
 }

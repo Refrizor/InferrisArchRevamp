@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.util.logging.Logger;
 
 @Plugin(id = "inferris", name = "Inferris", version = "1.0.0-alpha",
-        url = "https://example.org", description = "I did it!", authors = {"Me"})
+        url = "https://inferris.com", description = "Proxy plugin", authors = {"Inferris Development Team"})
 public class Inferris {
     private final ProxyServer server;
     private final Logger logger;
@@ -29,7 +29,7 @@ public class Inferris {
     private static Inferris instance;
 
     @Inject
-    public Inferris(ProxyServer server, Logger logger,  @DataDirectory Path dataDirectory) {
+    public Inferris(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
         this.server = server;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
@@ -38,10 +38,10 @@ public class Inferris {
         logger.info("Inferris plugin is enabled!");
     }
 
+    // Do some operations demanding access to the Velocity API here.
+
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        // Do some operation demanding access to the Velocity API here.
-        // For instance, we could register an event:
 
         Injector injector = Guice.createInjector(new PlayerDataModule());
         PlayerDataService playerDataService = injector.getInstance(PlayerDataService.class);

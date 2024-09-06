@@ -4,39 +4,55 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserPreferences {
 
-    @JsonProperty("sendWelcomeMessage")
-    private boolean sendWelcomeMessage;
+    @JsonProperty("isWelcomeMessageEnabled")
+    private boolean isWelcomeMessageEnabled;
 
-    @JsonProperty("vanishOnJoin")
-    private boolean vanishOnJoin;
+    @JsonProperty("isAutoVanishEnabled")
+    private boolean isAutoVanishEnabled;
+
+    @JsonProperty("isSurpriseModeEnabled")
+    private boolean isSurpriseModeEnabled;
 
     // Constructor
-    public UserPreferences(@JsonProperty("sendWelcomeMessage") boolean sendWelcomeMessage,
-                           @JsonProperty("vanishOnJoin") boolean vanishOnJoin) {
-        this.sendWelcomeMessage = sendWelcomeMessage;
-        this.vanishOnJoin = vanishOnJoin;
+    public UserPreferences(@JsonProperty("isWelcomeMessageEnabled") boolean isWelcomeMessageEnabled,
+                           @JsonProperty("isAutoVanishEnabled") boolean isAutoVanishEnabled,
+                           @JsonProperty("isSurpriseModeEnabled") boolean isSurpriseModeEnabled) {
+        this.isWelcomeMessageEnabled = isWelcomeMessageEnabled;
+        this.isAutoVanishEnabled = isAutoVanishEnabled;
+        this.isSurpriseModeEnabled = isSurpriseModeEnabled;
     }
 
     // Getters
-    @JsonProperty("sendWelcomeMessage")
-    public boolean shouldSendWelcomeMessage() {
-        return sendWelcomeMessage;
+    @JsonProperty("isWelcomeMessageEnabled")
+    public boolean isWelcomeMessageEnabled() {
+        return isWelcomeMessageEnabled;
     }
 
-    @JsonProperty("vanishOnJoin")
-    public boolean shouldVanishOnJoin() {
-        return vanishOnJoin;
+    @JsonProperty("isAutoVanishEnabled")
+    public boolean isAutoVanishEnabled() {
+        return isAutoVanishEnabled;
+    }
+
+    @JsonProperty("isSurpriseModeEnabled")
+    public boolean isSurpriseModeEnabled() {
+        return isSurpriseModeEnabled;
     }
 
     // Setters
-    public void setSendWelcomeMessage(boolean sendWelcomeMessage) {
-        this.sendWelcomeMessage = sendWelcomeMessage;
+    public void setWelcomeMessageEnabled(boolean isWelcomeMessageEnabled) {
+        this.isWelcomeMessageEnabled = isWelcomeMessageEnabled;
     }
 
-    public void setVanishOnJoin(boolean vanishOnJoin) {
-        this.vanishOnJoin = vanishOnJoin;
+    public void setAutoVanishEnabled(boolean isAutoVanishEnabled) {
+        this.isAutoVanishEnabled = isAutoVanishEnabled;
+    }
+
+    public void setSurpriseModeEnabled(boolean isSurpriseModeEnabled) {
+        this.isSurpriseModeEnabled = isSurpriseModeEnabled;
     }
 
     // Empty constructor for Jackson deserialization
-    public UserPreferences() {}
+    public UserPreferences() {
+    }
 }
+

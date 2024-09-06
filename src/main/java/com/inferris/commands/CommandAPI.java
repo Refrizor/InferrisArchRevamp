@@ -34,7 +34,7 @@ public class CommandAPI implements SimpleCommand {
         int length = args.length;
 
         Player sender = (Player) invocation.source();
-        sender.sendMessage(Component.text("Test!"));
+        sender.sendMessage(Component.text(playerDataCache.getCache().asMap().size()));
 
         if (length == 1) {
             switch (args[0].toLowerCase()) {

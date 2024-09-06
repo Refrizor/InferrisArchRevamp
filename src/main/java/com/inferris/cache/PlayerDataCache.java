@@ -32,5 +32,10 @@ public class PlayerDataCache {
         cache.invalidate(playerData.getUuid());
     }
 
+    // Temporary
+    public Cache<UUID, PlayerData> getCache() {
+        return cache;
+    }
+
     // Other cache-related methods...
 }

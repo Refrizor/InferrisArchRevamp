@@ -14,5 +14,6 @@ public class PlayerDefault {
     public static final int DEFAULT_COINS = 100;
     public static final Server DEFAULT_CURRENT_SERVER = Server.LOBBY;
     public static final UserPreferences DEFAULT_USER_PREFERENCES = new UserPreferences(true, false, false);
+    public static final PlayerSettings DEFAULT_PLAYER_SETTINGS = new PlayerSettings();
 }
 

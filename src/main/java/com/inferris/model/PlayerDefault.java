@@ -8,7 +8,7 @@ import java.time.Instant;
 public class PlayerDefault {
     public static final Rank DEFAULT_RANK = new Rank(SupporterRank.NONE, StaffRank.NONE);
     public static final Profile DEFAULT_PROFILE = new Profile(
-            Instant.EPOCH.getEpochSecond(), Instant.EPOCH.getEpochSecond(),
+            Instant.now().getEpochSecond(), Instant.now().getEpochSecond(),
             null, null,
             0, false, false);
     public static final int DEFAULT_COINS = 100;

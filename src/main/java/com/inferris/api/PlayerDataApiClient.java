@@ -7,8 +7,6 @@ import com.inferris.exception.ApiClientException;
 import com.inferris.exception.PlayerDataDeleteException;
 import com.inferris.exception.PlayerDataUpdateException;
 import com.inferris.model.*;
-import com.inferris.model.rank.StaffRank;
-import com.inferris.model.rank.SupporterRank;
 import com.inferris.utils.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -61,9 +59,10 @@ public class PlayerDataApiClient {
     public CompletableFuture<PlayerData> createPlayerDataAsync(UUID uuid, String username) {
         long joinDate = Instant.now().getEpochSecond();
 
-        PlayerData newPlayerData = new PlayerData(uuid, username, new Rank(SupporterRank.NONE, StaffRank.NONE),
-                new Profile(joinDate, joinDate, null, null, 0, false, false), 0, Channel.NONE, false, Server.LOBBY,
-                new UserPreferences(true, false));
+        PlayerData newPlayerData = new PlayerData(uuid, username, PlayerDefault.DEFAULT_RANK,
+                PlayerDefault.DEFAULT_PROFILE,
+                PlayerDefault.DEFAULT_COINS, Channel.NONE, false, PlayerDefault.DEFAULT_CURRENT_SERVER,
+                PlayerDefault.DEFAULT_USER_PREFERENCES);
 
         try {
             Inferris.getInstance().getLogger().info(SerializationUtils.serializePlayerData(newPlayerData));

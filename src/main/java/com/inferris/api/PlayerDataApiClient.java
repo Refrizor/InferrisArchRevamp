@@ -13,7 +13,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -40,6 +39,7 @@ public class PlayerDataApiClient {
                         future.complete(Optional.empty());
                     }
                 } else if (response.code() == 404) {
+                    Inferris.getInstance().getLogger().info("Player data 404 not found for UUID: " + uuid);
                     future.complete(Optional.empty());
                 } else {
                     future.completeExceptionally(new ApiClientException("Failed to fetch player data: " + response.code(), null));
@@ -48,17 +48,14 @@ public class PlayerDataApiClient {
 
             @Override
             public void onFailure(@NotNull Call<ApiResponse<PlayerData>> call, @NotNull Throwable t) {
-                future.completeExceptionally(new ApiClientException("Failed to fetch player data", t));
+                future.completeExceptionally(new ApiClientException("Failed to fetch player data for UUID: " + uuid, t));
             }
         });
 
         return future;
     }
 
-
     public CompletableFuture<PlayerData> createPlayerDataAsync(UUID uuid, String username) {
-        long joinDate = Instant.now().getEpochSecond();
-
         PlayerData newPlayerData = new PlayerData(uuid, username, PlayerDefault.DEFAULT_RANK,
                 PlayerDefault.DEFAULT_PROFILE,
                 PlayerDefault.DEFAULT_COINS, Channel.NONE, false, PlayerDefault.DEFAULT_CURRENT_SERVER,
@@ -78,15 +75,12 @@ public class PlayerDataApiClient {
                 if (response.isSuccessful()) {
                     future.complete(newPlayerData);
                 } else {
-                    Inferris.getInstance().getLogger().severe(response.message());
-
-                    future.completeExceptionally(new ApiClientException("Failed to create player data: " + response.code(), null));
+                    future.completeExceptionally(new ApiClientException("Failed to create player data: " + response.code() + response.message(), null));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
-                t.printStackTrace();
                 future.completeExceptionally(new ApiClientException("Failed to create player data", t));
             }
         });

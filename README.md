@@ -1,5 +1,5 @@
 # Proxy
-This is a demo architecture for Inferris that works with the [Inferris REST API](https://github.com/inferris-com/InferrisAPI) microservice. This will be integrated and updated into the private proxy plugin's current architecture.
+Inferris uses a modified version of Velocity. This is a demo architecture for the Inferris frontend plugin that runs on the software and works with the [Inferris REST API](https://github.com/inferris-com/InferrisAPI) microservice. This will be integrated and updated into the private proxy plugin's current architecture.
 
 A lot of the content are just debugging scenarios and examples, and may not reflect what is actually shown on the Minecraft network.
 
